@@ -1,0 +1,67 @@
+syntax = "proto3";
+
+package org.todo.v1;
+
+import 'org/todo/todo_task.proto';
+import 'google/api/annotations.proto';
+import 'google/protobuf/timestamp.proto';
+
+option go_package = "/todo";
+
+service TodoService {
+  rpc AddTask(AddTaskRequest) returns (AddTaskResponse){
+    option(google.api.http) = {
+      post: "/api/v1/task/add"
+      body: "*"
+    };
+  }
+  rpc ListTasks(ListTasksRequest) returns (stream ListTasksResponse){
+    option(google.api.http) = {
+      get: "/api/v1/task/list"
+    };
+  }
+  rpc UpdateTasks(stream UpdateTasksRequest) returns (UpdateTasksResponse){
+    option(google.api.http) = {
+      put: "/api/v1/task/update"
+    };
+  }
+  rpc DeleteTasks(stream DeleteTasksRequest) returns (stream DeleteTasksResponse){
+    option(google.api.http) = {
+      delete: "/api/v1/task/delete"
+    };
+  }
+}
+
+
+
+message AddTaskRequest {
+  string description = 1;
+  google.protobuf.Timestamp due_date = 2;
+}
+
+message AddTaskResponse {
+  uint64 id = 1;
+}
+
+message ListTasksRequest {
+}
+
+message ListTasksResponse {
+  Task task = 1;
+  bool overdue = 2;
+}
+
+message UpdateTasksRequest {
+  Task task = 1;
+}
+
+message UpdateTasksResponse {
+}
+
+message DeleteTasksRequest {
+  uint64 id = 1;
+}
+
+message DeleteTasksResponse {
+}
+

@@ -1,0 +1,260 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "org/todo/todo_service.proto",
+    "version": "version not set"
+  },
+  "tags": [
+    {
+      "name": "TodoService"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/api/v1/task/add": {
+      "post": {
+        "operationId": "TodoService_AddTask",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1AddTaskResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1AddTaskRequest"
+            }
+          }
+        ],
+        "tags": [
+          "TodoService"
+        ]
+      }
+    },
+    "/api/v1/task/delete": {
+      "delete": {
+        "operationId": "TodoService_DeleteTasks",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1DeleteTasksResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1DeleteTasksResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          }
+        ],
+        "tags": [
+          "TodoService"
+        ]
+      }
+    },
+    "/api/v1/task/list": {
+      "get": {
+        "operationId": "TodoService_ListTasks",
+        "responses": {
+          "200": {
+            "description": "A successful response.(streaming responses)",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "$ref": "#/definitions/v1ListTasksResponse"
+                },
+                "error": {
+                  "$ref": "#/definitions/rpcStatus"
+                }
+              },
+              "title": "Stream result of v1ListTasksResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "tags": [
+          "TodoService"
+        ]
+      }
+    },
+    "/api/v1/task/update": {
+      "put": {
+        "operationId": "TodoService_UpdateTasks",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UpdateTasksResponse"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "task.id",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "uint64"
+          },
+          {
+            "name": "task.description",
+            "in": "query",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "task.done",
+            "in": "query",
+            "required": false,
+            "type": "boolean"
+          },
+          {
+            "name": "task.dueDate",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "format": "date-time"
+          }
+        ],
+        "tags": [
+          "TodoService"
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "protobufAny": {
+      "type": "object",
+      "properties": {
+        "@type": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": {}
+    },
+    "rpcStatus": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "message": {
+          "type": "string"
+        },
+        "details": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/protobufAny"
+          }
+        }
+      }
+    },
+    "v1AddTaskRequest": {
+      "type": "object",
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1AddTaskResponse": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        }
+      }
+    },
+    "v1DeleteTasksResponse": {
+      "type": "object"
+    },
+    "v1ListTasksResponse": {
+      "type": "object",
+      "properties": {
+        "task": {
+          "$ref": "#/definitions/v1Task"
+        },
+        "overdue": {
+          "type": "boolean"
+        }
+      }
+    },
+    "v1Task": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uint64"
+        },
+        "description": {
+          "type": "string"
+        },
+        "done": {
+          "type": "boolean"
+        },
+        "dueDate": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "v1UpdateTasksResponse": {
+      "type": "object"
+    }
+  }
+}
